@@ -7,7 +7,9 @@
 
 char hello[100] = "안녕하세요. 만나서 반가워요.";
 char c_hello[20] = "안녕하세요";
-char rd_hello[100];
+char rd_str[100];
+char age[20] = "나는 24살이야";
+char name[50] = "내 이름은 서버야";
 int main()
 {
 	int c_socket, s_socket;
@@ -45,16 +47,32 @@ int main()
 
 	while(1)
 	{
-		read(c_socket,rd_hello,sizeof(rd_hello));
+		read(c_socket,rd_str,sizeof(rd_str));
 		
-		printf("%s\n",rd_hello);
+		printf("%s\n",rd_str);
 	
-		if(strncmp(rd_hello,c_hello,10) == 0)
+		if(strncmp(rd_str,c_hello,10) == 0)
 		{
 			n = strlen(hello);
 			write(c_socket, hello, n);
 		}
-	}
+
+		else if(strncmp(rd_str,"이름이 뭐야?",12) == 0)
+		{
+			n = strlen(name);
+			write(c_socket, name, n);
+		}
+
+		else if(strncmp(rd_str,"몇 살이야?",10) == 0)
+		{
+			n = strlen(age);
+			write(c_socket, age, n);
+		}
+		else
+		{
+			write(c_socket,rd_str,sizeof(rd_str));	
+		}
+	}	
 	close(c_socket);
 
 	}
