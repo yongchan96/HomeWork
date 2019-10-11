@@ -10,13 +10,15 @@ char c_hello[20] = "안녕하세요";
 char rd_str[100];
 char age[20] = "나는 24살이야";
 char name[50] = "내 이름은 서버야";
+char compare[2][50];
+char inputchar[2];
 int main()
 {
 	int c_socket, s_socket;
 	struct sockaddr_in s_addr, c_addr;
 	int len;
 	int n;
-
+	int result;
 	s_socket = socket(PF_INET,SOCK_STREAM,0);
 	
 	memset(&s_addr,0,sizeof(s_addr));
@@ -68,10 +70,29 @@ int main()
 			n = strlen(age);
 			write(c_socket, age, n);
 		}
-		else
+			
+		else if(strncmp(rd_str,"strcmp",6) == 0 )
 		{
-			write(c_socket,rd_str,sizeof(rd_str));	
+			strtok(rd_str,"\n ");
+			strcpy(compare[0],strtok(NULL,"\n "));
+			strcpy(compare[1],strtok(NULL,"\n "));
+			sprintf(inputchar,"%d",strcmp(compare[0],compare[1]));
+			write(c_socket,inputchar,sizeof(inputchar));
 		}
+
+		else if(strncmp(rd_str,"strlen",6) == 0)
+		{
+			strtok(rd_str,"\n ");
+			strcpy(compare[0],strtok(NULL,"\n "));
+			sprintf(inputchar,"%d",strlen(compare[0]));
+			write(c_socket,inputchar,sizeof(inputchar));
+		}
+		
+		else
+		{		
+			write(c_socket,rd_str,sizeof(rd_str));
+		}			
+		
 	}	
 	close(c_socket);
 
